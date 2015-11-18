@@ -1,0 +1,34 @@
+{
+	"name" : "elgervb/php-router",
+	"description" : "php-view",
+	"type" : "library",
+	"authors" : [{
+			"name" : "Elger van Boxtel",
+			"email" : "elgervb@gmail.com",
+			"homepage" : "http://elgervanboxtel.nl",
+			"role" : "developer"
+		}
+	],
+	"keywords" : [
+		"php",
+		"view"
+	],
+	"homepage" : "https://github.com/elgervb/php-router",
+	"license" : [
+		"MIT"
+	],
+	"require-dev" : {
+		"phpunit/phpunit" : "^4.8"
+	},
+	"autoload" : {
+		"psr-0" : {
+			"ns" : ""
+		}
+	},
+	"support" : {
+		"wiki" : "https://github.com/elgervb/php-router/wiki",
+		"source" : "https://github.com/elgervb/php-router",
+		"issues" : "https://github.com/elgervb/php-router/issues",
+		"email" : "elgervb@gmail.com"
+	}
+}
