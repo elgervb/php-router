@@ -1,4 +1,4 @@
-bootstrap=\\php-view\\tests\\PHPUnitBootstrap.php
+bootstrap=\\php-router\\tests\\PHPUnitBootstrap.php
 debug_print_output=true
 eclipse.preferences.version=1
 generate_code_coverage=true
