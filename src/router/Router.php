@@ -4,7 +4,6 @@ namespace router;
 /**
  *
  * @author eaboxt
- *        
  */
 class Router
 {
@@ -14,17 +13,19 @@ class Router
      * @var \ArrayObject
      */
     private $routes;
+    private $regexes;
 
     public function __construct()
     {
         $this->routes = new \ArrayObject();
+        $this->regexes = new \ArrayObject();
     }
 
     /**
      * Add a new route
      *
-     * @param string $path
-     *            the path regex (slashes will be automatically escaped)
+     * @param string $route
+     *            the path to the route
      * @param \Closure $aController
      *            the controller to execute when a route matches
      * @param string $requestType
@@ -32,12 +33,34 @@ class Router
      *            
      * @return \compact\routing\Router for chaining purposes
      */
-    public function route($path,\Closure $controller, $requestMethod = 'GET')
+    public function route($route, \Closure $controller, $requestMethod = 'GET')
     {
         $requestMethod = strtoupper($requestMethod);
         $routes = $this->getRoutes(strtoupper($requestMethod));
-        $routes->offsetSet($path, $controller);
+        $routes->offsetSet($route, $controller);
+       
+        $this->buildRegex($route);
+        
         return $this;
+    }
+    
+    /**
+     * Build a regex to match the route. This will replace all route params with a regex matcher.
+     * 
+     * @param string $route
+     */
+    private function buildRegex($route) {
+        $regex = $route;
+        
+        // check route params
+        if (preg_match_all("#(/:[^/]+)#i", $route, $matches)) {
+            $regex = $route;
+            foreach ($matches[1] as $part) {
+                $search = preg_quote($part);
+                $regex = preg_replace("#$search#i", '/(.*)', $regex);
+            }
+        }
+        $this->regexes->offsetSet($route, $regex);
     }
 
     /**
@@ -68,16 +91,17 @@ class Router
      *            
      * @return mixed The result from the controller or <code>null</code>
      */
-    public function match($route, $requestMethod)
+    public function match($path, $requestMethod = 'GET')
     {
         $requestMethod = strtoupper($requestMethod); 
         $routes = $this->getRoutes($requestMethod);
         
         // check regex
-        foreach ($routes as $path => $controller) {
-            $path = preg_replace("/\//", "\\\/", $path);
-            if (preg_match('/' . $path . '/', $route, $matches)) {
-                
+        foreach ($routes as $route => $controller) {
+            //$path = preg_replace("/\//", "\\\/", $path);
+            $regex = $this->regexes->offsetGet($route);
+            
+            if (preg_match("#{$regex}#", $path, $matches)) {
                 array_shift($matches);
                 return call_user_func_array($controller, $matches);
             }

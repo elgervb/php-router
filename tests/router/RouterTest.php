@@ -8,7 +8,7 @@ use router\Router;
  * @author eaboxt
  *        
  */
-class TemplateViewTest extends \PHPUnit_Framework_TestCase
+class RouterTest extends \PHPUnit_Framework_TestCase
 {
 
     protected function setUp()
@@ -20,7 +20,7 @@ class TemplateViewTest extends \PHPUnit_Framework_TestCase
     {
         parent::tearDown();
     }
-
+    
     public function testRootGet()
     {
         $router = new Router();
@@ -47,4 +47,31 @@ class TemplateViewTest extends \PHPUnit_Framework_TestCase
         $result = $router->match('/', 'POST');
         $this->assertEquals('rootRoutePost', $result);
     }
+    
+    public function testRootGet1Param()
+    {
+        $router = new Router();
+        $router->route('/:param', function ($arg1)
+        {
+            return $arg1;
+        });
+    
+        $result = $router->match('/param');
+        
+        $this->assertNotNull($result);
+        $this->assertEquals('param', $result);
+    }
+    
+    public function testRootGet2Params()
+    {
+        $router = new Router();
+        $router->route('/:param1/:param2', function ($arg1, $arg2)
+        {
+            return $arg1 . $arg2;
+        });
+    
+        $result = $router->match('/param1/param2');
+        $this->assertEquals('param1param2', $result);
+    }
+    
 }
