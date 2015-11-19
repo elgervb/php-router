@@ -20,6 +20,18 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         parent::tearDown();
     }
+    
+    public function testNoMatch()
+    {
+        $router = new Router();
+        $router->route('/', function ()
+        {
+            return 'rootRouteGet';
+        });
+    
+        $result = $router->match('/asdf');
+        $this->assertNull($result);
+    }
 
     public function testRootGet()
     {
@@ -115,7 +127,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($result);
         $this->assertEquals('arg2arg1', $result);
     }
-    
+
     public function testRoutesWithSameBasePath()
     {
         $router = new Router();
