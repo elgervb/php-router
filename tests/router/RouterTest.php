@@ -30,7 +30,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         });
     
         $result = $router->match('/asdf');
-        $this->assertNull($result);
+        $this->assertFalse($result);
     }
 
     public function testRootGet()
