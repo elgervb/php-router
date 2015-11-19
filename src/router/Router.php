@@ -20,6 +20,44 @@ class Router
         $this->routes = new \ArrayObject();
         $this->regexes = new \ArrayObject();
     }
+    
+    /**
+     * Build a regex to match the route. This will replace all route params with a regex matcher.
+     *
+     * @param string $route
+     */
+    private function buildRegex($route) {
+        $regex = $route;
+    
+        // check route params
+        if (preg_match_all("#(/:[^/]+)#i", $route, $matches)) {
+            $regex = $route;
+            foreach ($matches[1] as $part) {
+                $search = preg_quote($part);
+                // replace the route param. Make use we only replace one, but stop at the next slash
+                $regex = preg_replace("#$search#i", '/([^/]+)', $regex, 1);
+            }
+        }
+        $this->regexes->offsetSet($route, $regex.'$');
+    }
+    
+    /**
+     * Returns all routes for a request method, eg.
+     * GET, POST, etc
+     *
+     * @param string $for
+     *            the HTTP request method
+     *
+     * @return mixed
+     */
+    private function getRoutes($for)
+    {
+        if (! $this->routes->offsetExists($for)) {
+            $this->routes->offsetSet($for, new \ArrayObject());
+        }
+    
+        return $this->routes->offsetGet($for);
+    }
 
     /**
      * Add a new route
@@ -43,44 +81,6 @@ class Router
         
         return $this;
     }
-    
-    /**
-     * Build a regex to match the route. This will replace all route params with a regex matcher.
-     * 
-     * @param string $route
-     */
-    private function buildRegex($route) {
-        $regex = $route;
-        
-        // check route params
-        if (preg_match_all("#(/:[^/]+)#i", $route, $matches)) {
-            $regex = $route;
-            foreach ($matches[1] as $part) {
-                $search = preg_quote($part);
-                // replace the route param. Make use we only replace one, but stop at the next slash
-                $regex = preg_replace("#$search#i", '/([^/]+)', $regex, 1);
-            }
-        }
-        $this->regexes->offsetSet($route, $regex.'$');
-    }
-
-    /**
-     * Returns all routes for a request method, eg.
-     * GET, POST, etc
-     *
-     * @param string $for
-     *            the HTTP request method
-     *            
-     * @return mixed
-     */
-    private function getRoutes($for)
-    {
-        if (! $this->routes->offsetExists($for)) {
-            $this->routes->offsetSet($for, new \ArrayObject());
-        }
-        
-        return $this->routes->offsetGet($for);
-    }
 
     /**
      * Executes a controller registered to the path with the route params as arguments
@@ -90,7 +90,7 @@ class Router
      * @param string $requestMethod
      *            the HTTP request method
      *            
-     * @return mixed The result from the controller or <code>null</code>
+     * @return mixed The result from the controller or <code>false</code> when route could not be found
      */
     public function match($path, $requestMethod = 'GET')
     {
@@ -107,6 +107,6 @@ class Router
                 return call_user_func_array($controller, $matches);
             }
         }
-        return null;
+        return false;
     }
 }
