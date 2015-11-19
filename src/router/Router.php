@@ -57,7 +57,8 @@ class Router
             $regex = $route;
             foreach ($matches[1] as $part) {
                 $search = preg_quote($part);
-                $regex = preg_replace("#$search#i", '/(.*)', $regex);
+                // replace the route param. Make use we only replace one
+                $regex = preg_replace("#$search#i", '/(.*)', $regex, 1);
             }
         }
         $this->regexes->offsetSet($route, $regex);
