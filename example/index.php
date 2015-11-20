@@ -27,6 +27,3 @@ $router->route('/', function() use ($comment){
 
 
 echo $router->match($_SERVER['REQUEST_URI']);
-
-
-phpinfo();
