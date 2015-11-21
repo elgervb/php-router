@@ -21,10 +21,27 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         parent::tearDown();
     }
     
+    public function testExisingNameFail(){
+        $router = new Router();
+        $router->route('test', '/', function ()
+        {
+            return 'rootRouteGet';
+        });
+        
+        try {
+           $router->route('test', '/', function ()
+            {
+                return 'rootRouteGet';
+            });
+           $this->fail('Expected exception');
+        } catch (RouterException $ex) {
+            //
+        }
+    }
     public function testNoMatch()
     {
         $router = new Router();
-        $router->route('/', function ()
+        $router->route('test', '/', function ()
         {
             return 'rootRouteGet';
         });
@@ -36,7 +53,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRootGet()
     {
         $router = new Router();
-        $router->route('/', function ()
+        $router->route('test', '/', function ()
         {
             return 'rootRouteGet';
         });
@@ -48,10 +65,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRootPost()
     {
         $router = new Router();
-        $router->route('/', function ()
+        $router->route('test','/', function ()
         {
             return 'rootRouteGet';
-        })->route('/', function ()
+        })->route('test2','/', function ()
         {
             return 'rootRoutePost';
         }, 'POST');
@@ -63,7 +80,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRootGet1Param()
     {
         $router = new Router();
-        $router->route('/:param', function ($arg1)
+        $router->route('test','/:param', function ($arg1)
         {
             return $arg1;
         });
@@ -77,7 +94,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRootGet2Params()
     {
         $router = new Router();
-        $router->route('/:param1/:param2', function ($arg1, $arg2)
+        $router->route('test','/:param1/:param2', function ($arg1, $arg2)
         {
             return $arg1 . $arg2;
         });
@@ -89,7 +106,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRootGetParamCombined()
     {
         $router = new Router();
-        $router->route('/root/:param/path', function ($arg1)
+        $router->route('test','/root/:param/path', function ($arg1)
         {
             return $arg1;
         });
@@ -103,7 +120,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRootGetParam2Combined()
     {
         $router = new Router();
-        $router->route('/root/:param/path/:param2', function ($arg1, $arg2)
+        $router->route('test','/root/:param/path/:param2', function ($arg1, $arg2)
         {
             return $arg1 . $arg2;
         });
@@ -117,7 +134,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRootGetParam2Combined2()
     {
         $router = new Router();
-        $router->route('/root/:param2/path/:param', function ($arg1, $arg2)
+        $router->route('test','/root/:param2/path/:param', function ($arg1, $arg2)
         {
             return $arg1 . $arg2;
         });
@@ -131,10 +148,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRoutesWithSameBasePath()
     {
         $router = new Router();
-        $router->route('/root/:param/path/:param2', function ($arg1, $arg2)
+        $router->route('test','/root/:param/path/:param2', function ($arg1, $arg2)
         {
             return $arg1 . $arg2;
-        })->route('/root/:param', function ($arg1)
+        })->route('test2', '/root/:param', function ($arg1)
         {
             return $arg1;
         });
@@ -148,10 +165,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRoutesWithSameBasePath2()
     {
         $router = new Router();
-        $router->route('/root/:param', function ($arg1)
+        $router->route('test','/root/:param', function ($arg1)
         {
             return $arg1;
-        })->route('/root/:param/path/:param2', function ($arg1, $arg2)
+        })->route('test2', '/root/:param/path/:param2', function ($arg1, $arg2)
         {
             return $arg1 . $arg2;
         });

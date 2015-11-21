@@ -10,59 +10,19 @@ class Router
 
     /**
      *
-     * @var \ArrayObject
+     * @var \ArrayObject of Routes
      */
     private $routes;
-    private $regexes;
 
     public function __construct()
     {
         $this->routes = new \ArrayObject();
-        $this->regexes = new \ArrayObject();
-    }
-    
-    /**
-     * Build a regex to match the route. This will replace all route params with a regex matcher.
-     *
-     * @param string $route
-     */
-    private function buildRegex($route) {
-        $regex = $route;
-    
-        // check route params
-        if (preg_match_all("#(/:[^/]+)#i", $route, $matches)) {
-            $regex = $route;
-            foreach ($matches[1] as $part) {
-                $search = preg_quote($part);
-                // replace the route param. Make use we only replace one, but stop at the next slash
-                $regex = preg_replace("#$search#i", '/([^/]+)', $regex, 1);
-            }
-        }
-        $this->regexes->offsetSet($route, $regex.'$');
-    }
-    
-    /**
-     * Returns all routes for a request method, eg.
-     * GET, POST, etc
-     *
-     * @param string $for
-     *            the HTTP request method
-     *
-     * @return mixed
-     */
-    private function getRoutes($for)
-    {
-        if (! $this->routes->offsetExists($for)) {
-            $this->routes->offsetSet($for, new \ArrayObject());
-        }
-    
-        return $this->routes->offsetGet($for);
     }
 
     /**
      * Add a new route
      *
-     * @param string $route
+     * @param string $path
      *            the path to the route
      * @param \Closure $aController
      *            the controller to execute when a route matches
@@ -70,14 +30,16 @@ class Router
      *            the HTTP request method
      *            
      * @return \compact\routing\Router for chaining purposes
+     *        
+     * @throws RouterException when route with same name already exists
      */
-    public function route($route, \Closure $controller, $requestMethod = 'GET')
+    public function route($name, $path,\Closure $controller, $requestMethod = 'GET')
     {
-        $requestMethod = strtoupper($requestMethod);
-        $routes = $this->getRoutes(strtoupper($requestMethod));
-        $routes->offsetSet($route, $controller);
-       
-        $this->buildRegex($route);
+        if ($this->routes->offsetExists($name)) {
+            throw new RouterException("Route with name $name already exists");
+        }
+        $route = new Route($name, $path, $controller, strtoupper($requestMethod));
+        $this->routes->offsetSet($name, $route);
         
         return $this;
     }
@@ -94,17 +56,15 @@ class Router
      */
     public function match($path, $requestMethod = 'GET')
     {
-        $requestMethod = strtoupper($requestMethod); 
-        $routes = $this->getRoutes($requestMethod);
+        $requestMethod = strtoupper($requestMethod);
         
-        // check regex
-        foreach ($routes as $route => $controller) {
-            //$path = preg_replace("/\//", "\\\/", $path);
-            $regex = $this->regexes->offsetGet($route);
-            
-            if (preg_match("#{$regex}#", $path, $matches)) {
-                array_shift($matches);
-                return call_user_func_array($controller, $matches);
+        /* @var $route Route */
+        foreach ($this->routes as $route) {
+            if ($requestMethod === $route->getRequestMethod()) {
+                if (preg_match("#{$route->getRegex()}#", $path, $matches)) {
+                    array_shift($matches);
+                    return call_user_func_array($route->getController(), $matches);
+                }
             }
         }
         return false;

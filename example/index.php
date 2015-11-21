@@ -3,8 +3,8 @@ use router\Router;
 function loader($class)
 {
     $file = $class . '.php';
-    if (file_exists(__DIR__ . DIRECTORY_SEPARATOR . '../src'. DIRECTORY_SEPARATOR . $file)) {
-        require_once __DIR__ . DIRECTORY_SEPARATOR . '../src'. DIRECTORY_SEPARATOR . $file;
+    if (file_exists(__DIR__ . '/../src/' . $file)) {
+        require_once __DIR__ . '/../src/' . $file;
     }
 }
 spl_autoload_register('loader');
@@ -19,9 +19,9 @@ $comment = '<h2>Routes</h2>
     <hr />';
 
 $router = new Router();
-$router->route('/', function() use ($comment){
+$router->route('root', '/', function() use ($comment){
 	return $comment . 'Root';
-})->route('/:arg1', function($arg1) use ($comment){
+})->route('args', '/:arg1', function($arg1) use ($comment){
 	return $comment . 'route with argument "' . $arg1 . '"';
 });
 
