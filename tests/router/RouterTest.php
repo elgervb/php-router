@@ -14,6 +14,9 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
+        
+        $_SERVER['REQUEST_URI'] = '/';
+        $_SERVER['PHP_SELF'] = '/index.php/';
     }
 
     protected function tearDown()

@@ -14,7 +14,6 @@ include __DIR__ . '/../vendor/autoload.php';
 $router = new Router();
 $comment = '';
 
-
 $router->route('root', '/', function() use (&$comment){
 	return $comment . 'Root';
 })->route('args', '/:arg1', function($arg1) use (&$comment){

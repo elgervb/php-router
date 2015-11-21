@@ -1,7 +1,6 @@
 <?php
 namespace router;
 
-use Prophecy\Argument;
 /**
  *
  * @author eaboxt
@@ -70,6 +69,15 @@ class Router
                 // replace the route param. Make use we only replace one, but stop at the next slash
                 $url = preg_replace("#$search#i", '/'.array_shift($arguments), $url, 1);
             }
+        }
+        
+        // calculate base
+        $base  = dirname($_SERVER['PHP_SELF']);
+        
+        // Update request when we have a subdirectory
+        if(ltrim($base, '/')){
+        
+            return str_replace('\\', '/',  substr($_SERVER['REQUEST_URI'], strlen($base))) . $url;
         }
         
         return $url;
