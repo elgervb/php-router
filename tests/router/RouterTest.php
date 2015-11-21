@@ -178,4 +178,94 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($result);
         $this->assertEquals('arg1arg2', $result);
     }
+    
+    public function testToUrl()
+    {
+        $path = '/';
+        
+        $router = new Router();
+        $router->route('test', $path, function ()
+        {
+            return 'rootRouteGet';
+        });
+    
+        $result = $router->toUrl('test');
+        $this->assertEquals($result, $path);
+    }
+    
+    public function testToUrl2Segments()
+    {
+        $path = '/root/path';
+    
+        $router = new Router();
+        $router->route('test', $path, function ()
+        {
+            return 'rootRouteGet';
+        });
+    
+        $result = $router->toUrl('test');
+        $this->assertEquals($result, $path);
+    }
+    
+    public function testToUrl1RouteParam()
+    {
+        $path = '/:arg';
+    
+        $router = new Router();
+        $router->route('test', $path, function ()
+        {
+            return 'rootRouteGet';
+        });
+    
+        $result = $router->toUrl('test', 'arg');
+        $this->assertEquals($result, '/arg');
+    }
+    
+    public function testToUrl2RouteParam()
+    {
+        $path = '/:arg/:arg2';
+    
+        $router = new Router();
+        $router->route('test', $path, function ()
+        {
+            return 'rootRouteGet';
+        });
+    
+        $result = $router->toUrl('test', 'arg', 'arg2');
+        $this->assertEquals($result, '/arg/arg2');
+    }
+    
+    public function testToUrlNoRouteFail()
+    {
+        $router = new Router();
+        $router->route('test', '/', function ()
+        {
+            return 'rootRouteGet';
+        });
+    
+        try {
+            $router->toUrl('test2'); // test2 does not exist
+            $this->fail('Exception expected');
+        } catch(RouterException $ex) {
+            //
+        }
+    }
+    
+    public function testToUrlArgumentsAndRouteParamsNotMatchFail()
+    {
+        $path = '/:arg/:arg2';
+    
+        $router = new Router();
+        $router->route('test', $path, function ()
+        {
+            return 'rootRouteGet';
+        });
+    
+        try {
+          $router->toUrl('test', 'arg'); // 2 route params, 1 argument
+          $this->fail('Exception expected');
+        } catch(RouterException $ex) {
+            //
+        }
+    }
 }

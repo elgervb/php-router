@@ -1,6 +1,7 @@
 <?php
 namespace router;
 
+use Prophecy\Argument;
 /**
  *
  * @author eaboxt
@@ -33,7 +34,7 @@ class Router
      *        
      * @throws RouterException when route with same name already exists
      */
-    public function route($name, $path,\Closure $controller, $requestMethod = 'GET')
+    public function route($name, $path, \Closure $controller, $requestMethod = 'GET')
     {
         if ($this->routes->offsetExists($name)) {
             throw new RouterException("Route with name $name already exists");
@@ -42,6 +43,36 @@ class Router
         $this->routes->offsetSet($name, $route);
         
         return $this;
+    }
+
+    public function toUrl($name, $arguments = null)
+    {
+        if (! $this->routes->offsetExists($name)) {
+            throw new RouterException("No such route here: $name");
+        }
+        $arguments = func_get_args();
+        array_shift($arguments); // remove the $name argument
+        
+        /* @var $route Route */
+        $route = $this->routes->offsetGet($name);
+        $path = $route->getPath();
+        $url = $path;
+        
+        // replace route params with arguments
+        if (preg_match_all(Route::ROUTE_PARAMS_REGEX, $path, $matches)) {
+            // arguments and params MUST be the same
+            if (count($arguments) !== count($matches[1])) {
+                throw new RouterException('Number of given arguments ('.count($arguments).') must be equal to the number of route params ('.count($matches[1]).')');
+            }
+            
+            foreach ($matches[1] as $part) {
+                $search = preg_quote($part);
+                // replace the route param. Make use we only replace one, but stop at the next slash
+                $url = preg_replace("#$search#i", '/'.array_shift($arguments), $url, 1);
+            }
+        }
+        
+        return $url;
     }
 
     /**

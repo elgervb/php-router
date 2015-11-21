@@ -7,6 +7,7 @@ namespace router;
  */
 class Route
 {
+    const ROUTE_PARAMS_REGEX = "#(/:[^/]+)#i";
 
     private $name;
 
@@ -46,7 +47,7 @@ class Route
         $regex = $this->path;
         
         // check route params
-        if (preg_match_all("#(/:[^/]+)#i", $this->path, $matches)) {
+        if (preg_match_all(self::ROUTE_PARAMS_REGEX, $this->path, $matches)) {
             foreach ($matches[1] as $part) {
                 $search = preg_quote($part);
                 // replace the route param. Make use we only replace one, but stop at the next slash
@@ -67,11 +68,10 @@ class Route
     }
 
     /**
-     * Returns the name of the route
+     * Returns the path of the route
      */
-    public function getName()
-    {
-        return $this->name;
+    public function getPath() {
+        return $this->path;
     }
 
     /**
