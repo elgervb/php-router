@@ -1,15 +1,7 @@
 <?php
 use router\Router;
-function loader($class)
-{
-    $file = $class . '.php';
-    if (file_exists(__DIR__ . '/../src/' . $file)) {
-        require_once __DIR__ . '/../src/' . $file;
-    }
-}
-spl_autoload_register('loader');
-include __DIR__ . '/../vendor/autoload.php';
 
+include __DIR__ . '/../vendor/autoload.php';
 
 $router = new Router();
 $comment = '';

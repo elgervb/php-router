@@ -22,7 +22,7 @@
 	},
 	"autoload" : {
 		"psr-0" : {
-			"ns" : ""
+			"router" : "src"
 		}
 	},
 	"support" : {
