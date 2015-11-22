@@ -23,8 +23,8 @@ $router->route('root', '/', function() use (&$comment){
 
 $comment = '<h2>Routes</h2>
 <ul>
-    <li><a href="'.$router->toUrl('root').'">root</a></li>
-    <li><a href="'.$router->toUrl('args', 'arg1').'">/:arg1</a> <a href="'.$router->toUrl('args', 'arg2').'">/:arg1</a></li>
+    <li><a href="'.$router->url('root').'">root</a></li>
+    <li><a href="'.$router->url('args', 'arg1').'">/:arg1</a> <a href="'.$router->url('args', 'arg2').'">/:arg1</a></li>
 </ul>
 <hr />';
     
