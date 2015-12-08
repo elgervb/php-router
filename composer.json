@@ -1,6 +1,6 @@
 {
 	"name" : "elgervb/php-router",
-	"description" : "php-view",
+	"description" : "PHP router",
 	"type" : "library",
 	"authors" : [{
 			"name" : "Elger van Boxtel",
@@ -11,7 +11,8 @@
 	],
 	"keywords" : [
 		"php",
-		"view"
+		"routing",
+		"router"
 	],
 	"homepage" : "https://github.com/elgervb/php-router",
 	"license" : [
