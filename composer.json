@@ -23,7 +23,10 @@
 	},
 	"autoload" : {
 		"psr-0" : {
-			"router" : "src"
+			"router" : [
+				"src",
+				"tests"
+			]
 		}
 	},
 	"support" : {
