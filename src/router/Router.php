@@ -58,6 +58,13 @@ class Router
     {
         $requestMethod = strtoupper($requestMethod);
         
+        // strip url hash and querystring from url. These can be accessed as params and are not part of the url matching
+        $i =0; // prevent endless loop
+        while(preg_match('/(.*)[\?|\#]+/', $path, $matches) && $i<5) {
+            $path = $matches[1];
+            $i++;
+        }
+        
         /* @var $route Route */
         foreach ($this->routes as $route) {
             if ($requestMethod === $route->getRequestMethod()) {

@@ -272,6 +272,54 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * Test that a query string from the url is not taken into account when matching the url
+     * @return string
+     */
+    public function testRouteGetWithQueryString()
+    {
+        $router = new Router();
+        $router->route('test', '/test', function ()
+        {
+            return 'rootRouteQueryString';
+        });
+    
+        $result = $router->match('/test?asdf=asfd');
+        $this->assertEquals('rootRouteQueryString', $result);
+    }
+    
+    /**
+     * Test that a query string from the url is not taken into account when matching the url
+     * @return string
+     */
+    public function testRouteGetWithQueryStringAndHash()
+    {
+        $router = new Router();
+        $router->route('test', '/test', function ()
+        {
+            return 'rootRouteQueryStringAndHash';
+        });
+    
+        $result = $router->match('/test?asdf=asfd#hash');
+        $this->assertEquals('rootRouteQueryStringAndHash', $result);
+    }
+    
+    /**
+     * Test that a url hash is not taken into account when matching the url
+     * @return string
+     */
+    public function testRouteGetWithHash()
+    {
+        $router = new Router();
+        $router->route('test', '/test', function ()
+        {
+            return 'rootRouteHash';
+        });
+    
+        $result = $router->match('/test#asdf');
+        $this->assertEquals('rootRouteHash', $result);
+    }
+    
     public function testUrlInSubFolder()
     {
         $_SERVER['REQUEST_URI'] = '/router/example/';
