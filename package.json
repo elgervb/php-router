@@ -20,13 +20,13 @@
   },
   "homepage": "https://github.com/elgervb/php-router",
   "devDependencies": {
-    "browser-sync": "^2.10.0",
+    "browser-sync": "^2.12.3",
     "gulp": "^3.9.0",
-    "gulp-connect-php": "0.0.5",
+    "gulp-connect-php": "0.0.7",
     "gulp-if": "^2.0.0",
     "gulp-notify": "^2.2.0",
-    "gulp-phpunit": "^0.9.1",
-    "lodash": "^3.10.1",
-    "yargs": "^3.30.0"
+    "gulp-phpunit": "^0.14.0",
+    "lodash": "^4.11.1",
+    "yargs": "^4.6.0"
   }
 }
