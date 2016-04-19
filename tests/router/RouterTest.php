@@ -26,13 +26,13 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     
     public function testExisingNameFail(){
         $router = new Router();
-        $router->route('test', '/', function ()
+        $router->route('/', function ()
         {
             return 'rootRouteGet';
         });
         
         try {
-           $router->route('test', '/', function ()
+           $router->route('/', function ()
             {
                 return 'rootRouteGet';
             });
@@ -44,7 +44,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testNoMatch()
     {
         $router = new Router();
-        $router->route('test', '/', function ()
+        $router->route('/', function ()
         {
             return 'rootRouteGet';
         });
@@ -56,7 +56,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRootGet()
     {
         $router = new Router();
-        $router->route('test', '/', function ()
+        $router->route('/', function ()
         {
             return 'rootRouteGet';
         });
@@ -68,10 +68,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRootPost()
     {
         $router = new Router();
-        $router->route('test','/', function ()
+        $router->route('/', function ()
         {
             return 'rootRouteGet';
-        })->route('test2','/', function ()
+        })->route('/', function ()
         {
             return 'rootRoutePost';
         }, 'POST');
@@ -83,7 +83,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRootGet1Param()
     {
         $router = new Router();
-        $router->route('test','/:param', function ($arg1)
+        $router->route('/:param', function ($arg1)
         {
             return $arg1;
         });
@@ -97,7 +97,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRootGet2Params()
     {
         $router = new Router();
-        $router->route('test','/:param1/:param2', function ($arg1, $arg2)
+        $router->route('/:param1/:param2', function ($arg1, $arg2)
         {
             return $arg1 . $arg2;
         });
@@ -109,7 +109,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRootGetParamCombined()
     {
         $router = new Router();
-        $router->route('test','/root/:param/path', function ($arg1)
+        $router->route('/root/:param/path', function ($arg1)
         {
             return $arg1;
         });
@@ -123,7 +123,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRootGetParam2Combined()
     {
         $router = new Router();
-        $router->route('test','/root/:param/path/:param2', function ($arg1, $arg2)
+        $router->route('/root/:param/path/:param2', function ($arg1, $arg2)
         {
             return $arg1 . $arg2;
         });
@@ -137,7 +137,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRootGetParam2Combined2()
     {
         $router = new Router();
-        $router->route('test','/root/:param2/path/:param', function ($arg1, $arg2)
+        $router->route('/root/:param2/path/:param', function ($arg1, $arg2)
         {
             return $arg1 . $arg2;
         });
@@ -151,10 +151,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRoutesWithSameBasePath()
     {
         $router = new Router();
-        $router->route('test','/root/:param/path/:param2', function ($arg1, $arg2)
+        $router->route('/root/:param/path/:param2', function ($arg1, $arg2)
         {
             return $arg1 . $arg2;
-        })->route('test2', '/root/:param', function ($arg1)
+        })->route('/root/:param', function ($arg1)
         {
             return $arg1;
         });
@@ -168,10 +168,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testRoutesWithSameBasePath2()
     {
         $router = new Router();
-        $router->route('test','/root/:param', function ($arg1)
+        $router->route('/root/:param', function ($arg1)
         {
             return $arg1;
-        })->route('test2', '/root/:param/path/:param2', function ($arg1, $arg2)
+        })->route('/root/:param/path/:param2', function ($arg1, $arg2)
         {
             return $arg1 . $arg2;
         });
@@ -182,104 +182,14 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('arg1arg2', $result);
     }
     
-    public function testUrl()
-    {
-        $path = '/';
-        
-        $router = new Router();
-        $router->route('test', $path, function ()
-        {
-            return 'rootRouteGet';
-        });
-    
-        $result = $router->url('test');
-        $this->assertEquals($result, $path);
-    }
-    
-    public function testUrl2Segments()
-    {
-        $path = '/root/path';
-    
-        $router = new Router();
-        $router->route('test', $path, function ()
-        {
-            return 'rootRouteGet';
-        });
-    
-        $result = $router->url('test');
-        $this->assertEquals($result, $path);
-    }
-    
-    public function testUrl1RouteParam()
-    {
-        $path = '/:arg';
-    
-        $router = new Router();
-        $router->route('test', $path, function ()
-        {
-            return 'rootRouteGet';
-        });
-    
-        $result = $router->url('test', 'arg');
-        $this->assertEquals($result, '/arg');
-    }
-    
-    public function testUrl2RouteParam()
-    {
-        $path = '/:arg/:arg2';
-    
-        $router = new Router();
-        $router->route('test', $path, function ()
-        {
-            return 'rootRouteGet';
-        });
-    
-        $result = $router->url('test', 'arg', 'arg2');
-        $this->assertEquals($result, '/arg/arg2');
-    }
-    
-    public function testUrlNoRouteFail()
-    {
-        $router = new Router();
-        $router->route('test', '/', function ()
-        {
-            return 'rootRouteGet';
-        });
-    
-        try {
-            $router->url('test2'); // test2 does not exist
-            $this->fail('Exception expected');
-        } catch(RouterException $ex) {
-            //
-        }
-    }
-    
-    public function testUrlArgumentsAndRouteParamsNotMatchFail()
-    {
-        $path = '/:arg/:arg2';
-    
-        $router = new Router();
-        $router->route('test', $path, function ()
-        {
-            return 'rootRouteGet';
-        });
-    
-        try {
-          $router->url('test', 'arg'); // 2 route params, 1 argument
-          $this->fail('Exception expected');
-        } catch(RouterException $ex) {
-            //
-        }
-    }
     
     /**
      * Test that a query string from the url is not taken into account when matching the url
-     * @return string
      */
     public function testRouteGetWithQueryString()
     {
         $router = new Router();
-        $router->route('test', '/test', function ()
+        $router->route('/test', function ()
         {
             return 'rootRouteQueryString';
         });
@@ -290,12 +200,11 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     
     /**
      * Test that a query string from the url is not taken into account when matching the url
-     * @return string
      */
     public function testRouteGetWithQueryStringAndHash()
     {
         $router = new Router();
-        $router->route('test', '/test', function ()
+        $router->route('/test', function ()
         {
             return 'rootRouteQueryStringAndHash';
         });
@@ -306,12 +215,11 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     
     /**
      * Test that a url hash is not taken into account when matching the url
-     * @return string
      */
     public function testRouteGetWithHash()
     {
         $router = new Router();
-        $router->route('test', '/test', function ()
+        $router->route('/test', function ()
         {
             return 'rootRouteHash';
         });
@@ -319,37 +227,5 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $result = $router->match('/test#asdf');
         $this->assertEquals('rootRouteHash', $result);
     }
-    
-    public function testUrlInSubFolder()
-    {
-        $_SERVER['REQUEST_URI'] = '/router/example/';
-        $_SERVER['PHP_SELF'] = '/router/example/index.php';
-        
-        $router = new Router();
-        $router->route('test', '/:arg1', function ()
-        {
-            return 'rootRouteGet';
-        });
-    
-        $result = $router->url('test', 'arg1');
-        $this->assertEquals($result, '/router/example/arg1');
-    }
-    
-    public function testUrlBugIndexPHP()
-    {
-        $_SERVER['REQUEST_URI'] = '/arg1';
-        $_SERVER['PHP_SELF'] = '/index.php/arg1';
-    
-        $router = new Router();
-        $router->route('test', '/:arg1', function ()
-        {
-            return 'rootRouteGet';
-        });
-    
-        $result = $router->url('test', 'arg1');
-        $this->assertEquals($result, '/arg1');
-    }
-    
-    
     
 }

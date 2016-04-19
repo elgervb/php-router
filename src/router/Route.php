@@ -9,8 +9,6 @@ class Route
 {
     const ROUTE_PARAMS_REGEX = "#(/:[^/]+)#i";
 
-    private $name;
-
     private $controller;
 
     private $requestMethod;
@@ -22,16 +20,11 @@ class Route
     /**
      * Route Contructor
      *
-     * @param string $name
-     *            the name of the route
-     * @param string $route
-     *            the route path
-     * @param \Closure $controller
-     *            the controller function
-     * @param string $requestMethod
-     *            the HTTP request method this route is valid for
+     * @param string $route the route path
+     * @param \Closure $controller the controller function
+     * @param string $requestMethod the HTTP request method this route is valid for
      */
-    public function __construct($name, $route, \Closure $controller, $requestMethod = 'GET')
+    public function __construct($route, \Closure $controller, $requestMethod = 'GET')
     {
         $this->path = $route;
         $this->controller = $controller;
