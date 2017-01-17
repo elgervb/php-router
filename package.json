@@ -7,7 +7,8 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "gulp test",
+    "watch": "gulp test:watch"
   },
   "repository": {
     "type": "git",
@@ -20,13 +21,13 @@
   },
   "homepage": "https://github.com/elgervb/php-router",
   "devDependencies": {
-    "browser-sync": "^2.12.3",
-    "gulp": "^3.9.0",
-    "gulp-connect-php": "0.0.7",
-    "gulp-if": "^2.0.0",
-    "gulp-notify": "^2.2.0",
-    "gulp-phpunit": "^0.14.0",
-    "lodash": "^4.11.1",
-    "yargs": "^4.6.0"
+    "browser-sync": "2.12.3",
+    "gulp": "3.9.0",
+    "gulp-connect-php": "0.0.8",
+    "gulp-if": "2.0.0",
+    "gulp-notify": "2.2.0",
+    "gulp-phpunit": "0.21.4",
+    "lodash": "4.11.1",
+    "yargs": "6.6.0"
   }
 }

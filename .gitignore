@@ -4,3 +4,4 @@ tmp/
 vendor/
 composer.lock
 composer.phar
+yarn.lock
