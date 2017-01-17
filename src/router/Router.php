@@ -14,6 +14,9 @@ class Router
      */
     private $routes;
 
+    /**
+     * Create a new router
+     */
     public function __construct()
     {
         $this->routes = new \ArrayObject();
