@@ -31,6 +31,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             return 'rootRouteGet';
         });
         
+        $error = null;
         try {
            $router->route('/', function ()
             {
@@ -38,8 +39,9 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             });
            $this->fail('Expected exception');
         } catch (RouterException $ex) {
-            //
+            $error = $ex->getMessage();
         }
+        $this->assertNotNull($error);
     }
     public function testNoMatch()
     {
