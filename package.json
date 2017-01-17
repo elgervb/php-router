@@ -7,8 +7,11 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "gulp test",
-    "watch": "gulp test:watch"
+   "test": "./vendor/bin/phpunit tests --configuration phpunit.xml --coverage-text",
+    "test:coverage": "gulp test --coverage",
+    "watch": "gulp test:watch",
+    "start": "php -S localhost:4000 -t example/",
+    "postinstall": "composer install --no-interaction --prefer-source"
   },
   "repository": {
     "type": "git",
@@ -21,9 +24,7 @@
   },
   "homepage": "https://github.com/elgervb/php-router",
   "devDependencies": {
-    "browser-sync": "2.12.3",
     "gulp": "3.9.0",
-    "gulp-connect-php": "0.0.8",
     "gulp-if": "2.0.0",
     "gulp-notify": "2.2.0",
     "gulp-phpunit": "0.21.4",

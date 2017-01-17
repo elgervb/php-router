@@ -3,35 +3,10 @@ var gulp = require('gulp'),
     notify      = require('gulp-notify'),
     phpunit     = require('gulp-phpunit'),
     argv        = require('yargs').argv
-    _           = require('lodash'),
-    browserSync = require('browser-sync');
+    _           = require('lodash');
 
 var reload  = browserSync.reload;
 
-/**
-* Start a PHP server. Note that this will require at least PHP 5.4 as it uses the built in server
-*/
-gulp.task('serve', function() {
-	return require('gulp-connect-php').server({
-		base: './example',
-		port: 4011,
-		keepalive: true
-	});
-});
-
-/**
- * Start a PHP server and connect browser sync to it
- */
-gulp.task('start', ['serve'], function() {
-    browserSync({
-        proxy: '127.0.0.1:4011',
-        port: 4010,
-        open: false,
-        notify: true
-    });
-    
-    gulp.watch(['/**/*.php'], [reload]);
-});
 
 /**
  * Run all tests. To run with code coverage, use the --coverage commandline argument
