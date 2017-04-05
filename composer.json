@@ -15,9 +15,7 @@
 		"router"
 	],
 	"homepage" : "https://github.com/elgervb/php-router",
-	"license" : [
-		"MIT"
-	],
+	"license" : "MIT",
 	"require-dev" : {
 		"phpunit/phpunit" : "5.3"
 	},
@@ -35,5 +33,13 @@
 		"source" : "https://github.com/elgervb/php-router",
 		"issues" : "https://github.com/elgervb/php-router/issues",
 		"email" : "elgervb@gmail.com"
+	},
+	"require" : {
+		"elgervb/php-view" : "dev-master",
+		"elgervb/php-upload" : "dev-master",
+		"elgervb/php-router" : "dev-master",
+		"elgervb/php-http" : "dev-master",
+		"elgervb/php-handler" : "dev-master",
+		"elgervb/imagemanipulation" : "dev-master"
 	}
 }
