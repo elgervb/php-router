@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "./vendor/bin/phpunit --configuration phpunit.xml --coverage-text",
-    "test:watch": "watch 'npm run --silent test' ./src ./tests",
+    "test:watch": "watch 'yarn run test' ./src ./tests",
     "test:coverage": "$npm_package_scripts_test --coverage-text",
     "start": "php -S localhost:4000 -t src/ -c php.ini src/router.php",
     "postinstall": "composer install --no-interaction --prefer-source",
