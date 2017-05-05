@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "php -c php.ini ./vendor/phpunit/phpunit/phpunit --configuration phpunit.xml --coverage-text",
+    "test": "./vendor/bin/phpunit --configuration phpunit.xml --coverage-text",
     "test:watch": "watch 'npm run --silent test' ./src ./tests",
     "test:coverage": "$npm_package_scripts_test --coverage-text",
     "start": "php -S localhost:4000 -t src/ -c php.ini src/router.php",
