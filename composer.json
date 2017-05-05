@@ -35,11 +35,5 @@
 		"email" : "elgervb@gmail.com"
 	},
 	"require" : {
-		"elgervb/php-view" : "dev-master",
-		"elgervb/php-upload" : "dev-master",
-		"elgervb/php-router" : "dev-master",
-		"elgervb/php-http" : "dev-master",
-		"elgervb/php-handler" : "dev-master",
-		"elgervb/imagemanipulation" : "dev-master"
 	}
 }
